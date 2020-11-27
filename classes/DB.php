@@ -119,8 +119,10 @@ class DB {
      * @return array
      */
     private function runExports($logDir){
-        $export_ids[] = static::getExportId('active', $logDir);
-        $export_ids[] = static::getExportId('in_base', $logDir);
+#        $export_ids[] = static::getExportId('active', $logDir);
+#        $export_ids[] = static::getExportId('in_base', $logDir);
+        $export_ids[] = 1186411;
+        $export_ids[] = 1186414;
 
         return $export_ids;
     }
@@ -137,8 +139,9 @@ class DB {
             $post['key'] = GC_API_KEY;
             $url = "https://".GC_ACCOUNT.".getcourse.ru/pl/api/account/users?status=$status";
             do {
-                $response = cURL::executeRequest($url, $post, false, false, $logDir);
+                $response = cURL::executeRequest('POST', $url, $post, false, false, $logDir);
                 $json = json_decode($response);
+                var_dump($json);
                 sleep(60);
             } while (!$json->success);
             return $json->info->export_id;
@@ -157,7 +160,7 @@ class DB {
             $url = "https://".GC_ACCOUNT.".getcourse.ru/pl/api/account/exports/$export_id";
             $post['key'] = GC_API_KEY;
             do {
-                $response = cURL::executeRequest($url, $post, false, false, $logDir);
+                $response = cURL::executeRequest('POST', $url, $post, false, false, $logDir);
                 $json = json_decode($response);
                 sleep(60);
             } while (!$json->success);

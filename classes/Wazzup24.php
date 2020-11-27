@@ -45,7 +45,7 @@ class Wazzup24 {
                     $post['chatId'] = ($row->transport == 'whatsapp') ? preg_replace('/[^0-9]/', '', $row->to) : $row->to;
                     $post['text'] = $row->text ?? $row->content;
                     $post=json_encode($post);
-                    $result = cURL::executeRequest($url, $post, $headers, false, $logDir);
+                    $result = cURL::executeRequest('POST', $url, $post, $headers, false, $logDir);
                     DB::query("UPDATE send_to_wazzup24 SET success=1 WHERE id={$row->id}");
                     DB::query("UPDATE request SET last=CURRENT_TIMESTAMP() WHERE service='wazzup24'");
                 }
@@ -82,12 +82,14 @@ class Wazzup24 {
      */
     public static function trap($inputRequestData, $logDir) {
             if ($inputRequestData['messages'][0]['status']=="99") {
-                $phone = substr(preg_replace('/[^0-9]/', '', $inputRequestData['messages'][0]['phone']), -15);
+                $phone = substr(preg_replace('/[^0-9]/', '', $inputRequestData['messages'][0]['chatId']), -15);
                 try {
                     $email = DB::query("SELECT email FROM gc_users WHERE phone='$phone'")->fetch_object()->email;
                 } catch (Exception $exc) {
                 }
             if (!$email){
+                $nameFromWhatsapp = $inputRequestData['messages'][0]['authorName'] ?? $inputRequestData['messages'][0]['nameInMessenger'];
+                $params = Dadata::cleanNameFromWhatsapp($nameFromWhatsapp, $logDir);
                 preg_match("/\|.*\|/",$inputRequestData['messages'][0]['text'],$matches);
                 if ($matches){
                     $item=explode("|", $matches[0]);

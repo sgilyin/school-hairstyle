@@ -17,10 +17,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-echo 'ok';
-
 ini_set('max_execution_time', '300');
-// ini_set('memory_limit', '-1'); //Для загрузки всех пользователей из ГК
+#ini_set('memory_limit', '-1'); //Для загрузки всех пользователей из ГК
 set_time_limit(300);
 
 spl_autoload_register(function ($class) {
@@ -37,6 +35,10 @@ if ($inputRemoteAddr == '195.191.78.178') {
     die();
 }
 */
+
+function test() {
+    
+}
 
 include_once 'config.php';
 
@@ -60,7 +62,6 @@ switch ($inputRequestMethod){
                 SMSC::sendWaGc($logDir);
                 Wazzup24::send($logDir);
                 SMSC::syncMessages($logDir);
-                Vkontakte::send($logDir);
                 break;
 
             case 'dbAddUser':
@@ -89,7 +90,7 @@ switch ($inputRequestMethod){
                 break;
 
             case 'test':
-                var_dump(Facebook::test($logDir));
+                var_dump(SMSC::sendWaGc($logDir));
                 break;
         }
         break;
