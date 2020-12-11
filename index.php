@@ -72,6 +72,10 @@ switch ($inputRequestMethod){
                 DB::updateUser($inputRequestData);
                 break;
 
+            case 'dbDeleteUser':
+                DB::deleteUser($inputRequestData);
+                break;
+
             case 'dbSyncUsers':
                 var_dump(DB::syncUsers($logDir));
                 break;
