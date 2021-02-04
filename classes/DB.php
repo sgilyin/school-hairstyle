@@ -208,4 +208,9 @@ class DB {
     public static function showVkQueue() {
         return static::query("SELECT COUNT(*) AS count FROM vk_api WHERE success=0")->fetch_object()->count;
     }
+
+    public static function exportDublicatePhonesToExcel() {
+        $dublicates = static::query("SELECT * FROM gc_users WHERE phone IN (SELECT phone FROM gc_users WHERE NOT phone IS NULL AND NOT phone='' GROUP BY phone HAVING count(*) > 1);")->fetch_object();
+        var_dump($dublicates);
+    }
 }

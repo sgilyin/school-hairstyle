@@ -93,6 +93,10 @@ switch ($inputRequestMethod){
                 echo 'Ok';
                 break;
 
+            case 'exportDublicatePhonesToExcel':
+                DB::exportDublicatePhonesToExcel();
+                break;
+
             case 'test':
                 var_dump(SMSC::sendWaGc($logDir));
                 break;
@@ -103,7 +107,19 @@ switch ($inputRequestMethod){
         if (!$inputRequestData){
             $inputRequestData = json_decode(file_get_contents("php://input"), true);
         }
-        Wazzup24::trap($inputRequestData, $logDir);
+        switch ($inputRemoteAddr) {
+            case '95.211.243.70':
+                SemySMS::trap($inputRequestData, $logDir);
+                break;
+
+            case '136.243.44.89':
+                Senler::trap($inputRequestData, $logDir);
+                break;
+
+            default:
+                Wazzup24::trap($inputRequestData, $logDir);
+                break;
+        }
         break;
 }
 

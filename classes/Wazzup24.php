@@ -126,11 +126,11 @@ class Wazzup24 {
                     }
                 }
                 $email = $emailInMessage ?? "$phone@facebook.com";
-                $params['user']['phone'] = $phone;
-                $params['user']['email'] = $email;
-                $params['user']['addfields']['whatsapp']=$phone;
-                GetCourse::addUser($params, $logDir);
             }
+            $params['user']['phone'] = $phone;
+            $params['user']['email'] = $email;
+            $params['user']['addfields']['whatsapp']=$phone;
+            GetCourse::addUser($params, $logDir);
             GetCourse::sendContactForm($email, $inputRequestData['messages'][0]['text'].PHP_EOL.'Отправлено из WhatsApp', $logDir);
             DB::query("UPDATE request SET last=CURRENT_TIMESTAMP() WHERE service='getcourse'");
         }
