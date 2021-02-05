@@ -84,6 +84,10 @@ switch ($inputRequestMethod){
                 GetCourse::addUserRequest($inputRequestData, $logDir);
                 break;
 
+            case 'sbCreditRegister':
+                echo Sberbank::register($inputRequestData, $logDir);
+                break;
+
             case 'showWa24Queue':
                 echo DB::showWa24Queue();
                 break;
